@@ -146,7 +146,8 @@ public class JavaWebServer
  			//el metodo es GET
  			if (uri.equals("/"))
  			{	
- 				
+ 				out.println("HTTP/1.1 200 OK");
+ 				out.println("Content-Type: text/html\n");
  				out.println
  				(
  						"<html>"+
