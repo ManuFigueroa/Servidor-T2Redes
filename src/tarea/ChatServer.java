@@ -2,32 +2,33 @@ package tarea;
 /* ChatServer.java */
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
+//import java.nio.charset.Charset;
+//import java.io.BufferedWriter;
+//import java.io.File;
+//import java.io.FileInputStream;
+//import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
-import java.io.InputStream;
+//import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Hashtable;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+//import java.util.Properties;
+//import java.util.StringTokenizer;
+//import java.util.concurrent.Executor;
+//import java.util.concurrent.Executors;
 
-import org.apache.commons.io.IOUtils;
+//import org.apache.commons.io.IOUtils;
  
 public class ChatServer {
 
     private static int port = 8080; /* port to listen on */
-    private static final int fNumberOfThreads = 100;
-	private static final Executor fThreadPool = Executors.newFixedThreadPool(fNumberOfThreads);
+    //private static final int fNumberOfThreads = 100;
+	//private static final Executor fThreadPool = Executors.newFixedThreadPool(fNumberOfThreads);
 
  
-    public static void main (String[] args) throws IOException {
+    @SuppressWarnings("resource")
+	public static void main (String[] args) throws IOException {
  
         ServerSocket server = null;
         try {
@@ -435,7 +436,8 @@ class ChatServerProtocol {
 }
  
 class ClientConn implements Runnable {
-    private Socket client;
+    @SuppressWarnings("unused")
+	private Socket client;
     private BufferedReader in = null;
     private PrintWriter out = null;
  
