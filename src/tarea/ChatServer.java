@@ -464,6 +464,7 @@ class ClientConn implements Runnable {
              * sent back to the client */
             while ((msg = in.readLine()) != null) {
                 response = protocol.process(msg);
+                System.out.println("Comando ingresado: "+msg);
                 out.println("SERVER: " + response);
             }
         } catch (IOException e) {
