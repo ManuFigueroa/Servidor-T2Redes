@@ -139,8 +139,8 @@ class ChatServerProtocol {
     private boolean sendMsg(String recipient, String msg) {
         if (nicks.containsKey(recipient)) {
             //ClientConn c = nicks.get(recipient);
-            guardar(msg,recipient,nick);
-            guardar(msg,recipient,recipient);
+            guardar(msg,nick,recipient);
+            guardar(msg,nick,nick);
             //c.sendMsg(nick + ": " + msg);
             return true;
         } else {
@@ -175,6 +175,19 @@ class ChatServerProtocol {
         		return msg_SEND_FAILED;
         	}
         	
+        }
+        else if (msg_type.equals("FILE")) {
+        	String recipient = msg_parts[1];
+        	String ruta = msg_parts[2];
+        	Socket client = this.conn.getClient();
+        	try {
+				InputStream is = client.getInputStream();
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+        	
+        	return msg_OK;
         }
         else{
             return msg_INVALID;
@@ -247,7 +260,7 @@ class ClientConn implements Runnable {
     private PrintWriter out = null;
  
     ClientConn(Socket client) {
-        this.client = client;
+        this.setClient(client);
         try {
             /* obtain an input stream to this client ... */
             in = new BufferedReader(new InputStreamReader(
@@ -280,5 +293,13 @@ class ClientConn implements Runnable {
     public void sendMsg(String msg) {
         out.println(msg);
     }
+
+	public Socket getClient() {
+		return client;
+	}
+
+	public void setClient(Socket client) {
+		this.client = client;
+	}
     
 }
