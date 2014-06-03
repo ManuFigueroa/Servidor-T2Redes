@@ -139,8 +139,8 @@ class ChatServerProtocol {
     private boolean sendMsg(String recipient, String msg) {
         if (nicks.containsKey(recipient)) {
             //ClientConn c = nicks.get(recipient);
-            guardar(msg,nick);
-            guardar(msg,recipient);
+            guardar(msg,recipient,nick);
+            guardar(msg,recipient,recipient);
             //c.sendMsg(nick + ": " + msg);
             return true;
         } else {
@@ -181,12 +181,12 @@ class ChatServerProtocol {
         }
     }
     
-    public static void guardar(String Mensaje, String contacto) {
+    public static void guardar(String Mensaje, String De, String Para) {
 		try {
  
-			String escribe = new String ("<p>"+contacto + ": " + Mensaje + "</p>");
+			String escribe = new String ("<p>"+De+ ": " + Mensaje + "</p>");
  
-			File file = new File(contacto+".txt");
+			File file = new File(Para+".txt");
 			//file.createNewFile();
 			
 			if (!file.exists()) {
