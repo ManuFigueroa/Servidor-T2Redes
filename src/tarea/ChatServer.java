@@ -130,7 +130,43 @@ class ChatServerProtocol {
             } else {
                 return msg_NICK_IN_USE;
             }
-        } else {
+        } 
+        else if (msg.startsWith("#arch")){
+        	String[] msg_parts = msg.split(" ", 3);
+        	String file = msg_parts[2];
+                    	
+        	System.out.println("Transfiriendo");
+        	        	
+        	BufferedInputStream bis;
+       	 	BufferedOutputStream bos;
+    	 
+    	 	byte[] receivedData;
+    	 	int in;
+        	try {
+    			 receivedData = new byte[1024];
+    			 bis = new BufferedInputStream(this.conn.getClient().getInputStream());
+    			 //DataInputStream dis = new DataInputStream(this.conn.getClient().getInputStream());
+    			 //Recibimos el nombre del fichero
+    			 //file = dis.readUTF();
+    			 //file = file.substring(file.indexOf('\\')+1,file.length());
+    			 //Para guardar fichero recibido
+    			 bos = new BufferedOutputStream(new FileOutputStream(file));
+    			 while ((in = bis.read(receivedData)) != -1){
+    			 System.out.println("paso");
+    			 bos.write(receivedData,0,in);
+    			 }
+    			 bos.close();
+    			 //dis.close();
+    			 //System.out.println("Llego aca");
+    			 
+    			
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+        	System.out.println("Fin de transferencia");
+        	return msg_OK;
+        }
+        else {
             return msg_SPECIFY_NICK;
         }
     }
@@ -187,8 +223,9 @@ class ChatServerProtocol {
         	String file;        	 
         	String recipient = msg_parts[1];
         	file = msg_parts[2];
+        	sendMsg(recipient, "archivo transferido:"+file);
         	
-        	Transferir(file,recipient);
+        	//Transferir(file,recipient);
         	//System.out.println("archivo se llama: " + file);       	
         	
         	return msg_OK;
@@ -197,35 +234,7 @@ class ChatServerProtocol {
             return msg_INVALID;
         }
     }
-    
-    private void Transferir(String file, String recipient) {
-    	BufferedInputStream bis;
-   	 	BufferedOutputStream bos;
-	 
-	 	byte[] receivedData;
-	 	int in;
-    	try {
-			 receivedData = new byte[1024];
-			 bis = new BufferedInputStream(this.conn.getClient().getInputStream());
-			 //DataInputStream dis = new DataInputStream(this.conn.getClient().getInputStream());
-			 //Recibimos el nombre del fichero
-			 //file = dis.readUTF();
-			 //file = file.substring(file.indexOf('\\')+1,file.length());
-			 //Para guardar fichero recibido
-			 bos = new BufferedOutputStream(new FileOutputStream(file));
-			 while ((in = bis.read(receivedData)) != -1){
-			 bos.write(receivedData,0,in);
-			 }
-			 bos.close();
-			 //dis.close();
-			 //System.out.println("Llego aca");
-			 
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-   	
-	}
+
 
 	public static void guardar(String Mensaje, String De, String Para) {
 		try {
@@ -313,7 +322,7 @@ class ClientConn implements Runnable {
              * according to our protocol and the resulting response is 
              * sent back to the client */
             while ((msg = in.readLine()) != null) {
-            	System.out.println("Comando ingresado: "+msg);
+            	System.out.println("Comando ingresado: "+msg + " desde: " + client);
             	response = protocol.process(msg);
                 out.println("SERVER: " + response);
                 //System.out.println("SERVER: "+response+" Socket abierto: "+client);
