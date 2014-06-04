@@ -3,9 +3,14 @@ package tarea;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 //import java.nio.charset.Charset;
 //import java.io.BufferedWriter;
@@ -177,11 +182,33 @@ class ChatServerProtocol {
         	
         }
         else if (msg_type.equals("FILE")) {
+        	DataOutputStream output;
+        	 BufferedInputStream bis;
+        	 BufferedOutputStream bos;
+        	 
+        	byte[] receivedData;
+        	 int in;
+        	 String file;
+        	 
         	String recipient = msg_parts[1];
-        	String ruta = msg_parts[2];
+        	//String file = msg_parts[2];
         	Socket client = this.conn.getClient();
         	try {
-				InputStream is = client.getInputStream();
+				receivedData = new byte[1024];
+				 bis = new BufferedInputStream(this.conn.getClient().getInputStream());
+				 DataInputStream dis = new DataInputStream(this.conn.getClient().getInputStream());
+				 //Recibimos el nombre del fichero
+				 file = dis.readUTF();
+				 file = file.substring(file.indexOf('\\')+1,file.length());
+				 //Para guardar fichero recibido
+				 bos = new BufferedOutputStream(new FileOutputStream(file));
+				 while ((in = bis.read(receivedData)) != -1){
+				 bos.write(receivedData,0,in);
+				 }
+				 bos.close();
+				 dis.close();
+				 System.out.println("Socket es: "+this.conn.getClient());
+				 
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -284,6 +311,7 @@ class ClientConn implements Runnable {
                 response = protocol.process(msg);
                 System.out.println("Comando ingresado: "+msg);
                 out.println("SERVER: " + response);
+                System.out.println("SERVER: "+response+" Socket abierto: "+client);
             }
         } catch (IOException e) {
             System.err.println(e);
