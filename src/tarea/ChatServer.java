@@ -207,6 +207,7 @@ class ChatServerProtocol {
 				 }
 				 bos.close();
 				 dis.close();
+				 //bis.close();
 				 System.out.println("Socket es: "+this.conn.getClient());
 				 
 				
