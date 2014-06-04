@@ -6,8 +6,8 @@ import java.nio.charset.Charset;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+//import java.io.DataInputStream;
+//import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,7 +28,7 @@ import java.util.Hashtable;
 //import java.util.StringTokenizer;
 //import java.util.concurrent.Executor;
 //import java.util.concurrent.Executors;
-import java.util.Properties;
+//import java.util.Properties;
 
 //import org.apache.commons.io.IOUtils;
  
@@ -182,37 +182,14 @@ class ChatServerProtocol {
         	
         }
         else if (msg_type.equals("FILE")) {
-        	DataOutputStream output;
-        	 BufferedInputStream bis;
-        	 BufferedOutputStream bos;
-        	 
-        	byte[] receivedData;
-        	 int in;
-        	 String file;
-        	 
+        	 //DataOutputStream output;
+        
+        	String file;        	 
         	String recipient = msg_parts[1];
-        	//String file = msg_parts[2];
-        	Socket client = this.conn.getClient();
-        	try {
-				receivedData = new byte[1024];
-				 bis = new BufferedInputStream(this.conn.getClient().getInputStream());
-				 DataInputStream dis = new DataInputStream(this.conn.getClient().getInputStream());
-				 //Recibimos el nombre del fichero
-				 file = dis.readUTF();
-				 file = file.substring(file.indexOf('\\')+1,file.length());
-				 //Para guardar fichero recibido
-				 bos = new BufferedOutputStream(new FileOutputStream(file));
-				 while ((in = bis.read(receivedData)) != -1){
-				 bos.write(receivedData,0,in);
-				 }
-				 bos.close();
-				 dis.close();
-				 System.out.println("Socket es: "+this.conn.getClient());
-				 
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+        	file = msg_parts[2];
+        	
+        	Transferir(file,recipient);
+        	//System.out.println("archivo se llama: " + file);       	
         	
         	return msg_OK;
         }
@@ -221,7 +198,36 @@ class ChatServerProtocol {
         }
     }
     
-    public static void guardar(String Mensaje, String De, String Para) {
+    private void Transferir(String file, String recipient) {
+    	BufferedInputStream bis;
+   	 	BufferedOutputStream bos;
+	 
+	 	byte[] receivedData;
+	 	int in;
+    	try {
+			 receivedData = new byte[1024];
+			 bis = new BufferedInputStream(this.conn.getClient().getInputStream());
+			 //DataInputStream dis = new DataInputStream(this.conn.getClient().getInputStream());
+			 //Recibimos el nombre del fichero
+			 //file = dis.readUTF();
+			 //file = file.substring(file.indexOf('\\')+1,file.length());
+			 //Para guardar fichero recibido
+			 bos = new BufferedOutputStream(new FileOutputStream(file));
+			 while ((in = bis.read(receivedData)) != -1){
+			 bos.write(receivedData,0,in);
+			 }
+			 bos.close();
+			 //dis.close();
+			 //System.out.println("Llego aca");
+			 
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+   	
+	}
+
+	public static void guardar(String Mensaje, String De, String Para) {
 		try {
  
 			String escribe = new String ("<p>"+De+ ": " + Mensaje + "</p>");
@@ -281,7 +287,6 @@ class ChatServerProtocol {
 }
  
 class ClientConn implements Runnable {
-    @SuppressWarnings("unused")
 	private Socket client;
     private BufferedReader in = null;
     private PrintWriter out = null;
@@ -308,10 +313,10 @@ class ClientConn implements Runnable {
              * according to our protocol and the resulting response is 
              * sent back to the client */
             while ((msg = in.readLine()) != null) {
-                response = protocol.process(msg);
-                System.out.println("Comando ingresado: "+msg);
+            	System.out.println("Comando ingresado: "+msg);
+            	response = protocol.process(msg);
                 out.println("SERVER: " + response);
-                System.out.println("SERVER: "+response+" Socket abierto: "+client);
+                //System.out.println("SERVER: "+response+" Socket abierto: "+client);
             }
         } catch (IOException e) {
             System.err.println(e);
