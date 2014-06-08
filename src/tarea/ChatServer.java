@@ -217,14 +217,7 @@ class ChatServerProtocol {
 			 bos.write(receivedData,0,in);
 			 }
 			 bos.close();
-<<<<<<< HEAD
-			 //dis.close();
-			 
-			 
-			
-=======
-			 bis.close();		
->>>>>>> FETCH_HEAD
+			 bis.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
