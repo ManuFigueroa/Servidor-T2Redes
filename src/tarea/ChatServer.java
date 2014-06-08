@@ -217,10 +217,7 @@ class ChatServerProtocol {
 			 bos.write(receivedData,0,in);
 			 }
 			 bos.close();
-			 //dis.close();
-			 
-			 
-			
+			 bis.close();		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
