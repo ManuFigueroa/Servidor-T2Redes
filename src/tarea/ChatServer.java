@@ -204,7 +204,7 @@ class ChatServerProtocol {
 	 
 	 	byte[] receivedData;
 	 	int in;
-    	try {
+    	try {System.out.println("SOY: "+this.conn.getClient());
 			 receivedData = new byte[1024];
 			 bis = new BufferedInputStream(this.conn.getClient().getInputStream());
 			 //DataInputStream dis = new DataInputStream(this.conn.getClient().getInputStream());
@@ -218,7 +218,7 @@ class ChatServerProtocol {
 			 }
 			 bos.close();
 			 //dis.close();
-			 //System.out.println("Llego aca");
+			 
 			 
 			
 		} catch (IOException e) {
@@ -316,7 +316,7 @@ class ClientConn implements Runnable {
             	System.out.println("Comando ingresado: "+msg);
             	response = protocol.process(msg);
                 out.println("SERVER: " + response);
-                //System.out.println("SERVER: "+response+" Socket abierto: "+client);
+                System.out.println("SERVER: "+response+" Socket abierto: "+client);
             }
         } catch (IOException e) {
             System.err.println(e);
